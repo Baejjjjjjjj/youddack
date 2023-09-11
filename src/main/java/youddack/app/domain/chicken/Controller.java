@@ -2,12 +2,16 @@ package youddack.app.domain.chicken;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import youddack.app.config.BaseResponse;
+
+import java.util.Optional;
 
 @Slf4j
 @Tag(name = "치킨")
@@ -66,7 +70,11 @@ public class Controller {
 
     @Operation(summary = "치킨 상세 정보", description = "치킨 상세 정보 API")
     @GetMapping("/")
-    public BaseResponse<String> GetChickenDetail(){
+    public BaseResponse<String> GetChickenDetail(@NotEmpty @RequestParam int chickenId){
+        System.out.println(chickenId);
+
+
+
 
         return null;
 
