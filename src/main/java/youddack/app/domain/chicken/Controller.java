@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import youddack.app.config.BaseResponse;
+import youddack.app.domain.chicken.dto.ResponseDto;
 
 import java.util.Optional;
 
@@ -19,6 +20,8 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 public class Controller {
+
+    public final Provider provider;
 
     /**
      * 치킨추천 API
@@ -70,13 +73,9 @@ public class Controller {
 
     @Operation(summary = "치킨 상세 정보", description = "치킨 상세 정보 API")
     @GetMapping("/")
-    public BaseResponse<String> GetChickenDetail(@NotEmpty @RequestParam int chickenId){
-        System.out.println(chickenId);
+    public BaseResponse<ResponseDto.ChickenDto> GetChickenDetail(@NotEmpty @RequestParam Long chickenId){
 
-
-
-
-        return null;
+        return new BaseResponse<>(provider.findChickenDetail(chickenId));
 
     }
 
