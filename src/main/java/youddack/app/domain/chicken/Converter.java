@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Converter {
 
-    public static ResponseDto.ChickenDto toShowChickenDto(Chicken chicken, List<Category> categoryList, List<Flavor> flavorList){
+    public static ResponseDto.ChickenDto toChickenDto(Chicken chicken, List<Category> categoryList, List<Flavor> flavorList){
 
         return ResponseDto.ChickenDto.builder()
                 .id(chicken.getId())
@@ -24,6 +24,16 @@ public class Converter {
                 .brand(chicken.getBrand())
                 .categoryList(categoryList)
                 .flavorList(flavorList)
+                .build();
+    }
+
+
+    //public static List<ResponseDto.ChickenDto> toChickenDtoList(List<Ch>)
+
+    public static ResponseDto.ListChickenDto toChickenListDto (List<ResponseDto.ChickenDto> chickenDtos){
+
+        return ResponseDto.ListChickenDto.builder()
+                .chickenDto(chickenDtos)
                 .build();
     }
 

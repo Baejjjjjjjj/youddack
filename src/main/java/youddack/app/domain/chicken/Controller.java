@@ -2,7 +2,9 @@ package youddack.app.domain.chicken;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import youddack.app.config.BaseResponse;
 import youddack.app.domain.chicken.dto.ResponseDto;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -47,6 +50,7 @@ public class Controller {
     @GetMapping("/list")
     public BaseResponse<String> GetChickenList(){
 
+
         return null;
 
     }
@@ -59,9 +63,11 @@ public class Controller {
 
     @Operation(summary = "치킨 비교 ", description = "치킨 비교 API")
     @GetMapping("/comparison")
-    public BaseResponse<String> GetChickenComparison(){
+    public BaseResponse<ResponseDto.ListChickenDto> GetChickenComparison(@NotEmpty @RequestParam @Size(min=1, max= 4) List<Long> chicken_id){
 
-        return null;
+        return new BaseResponse<>(provider.findChickenComparisonList(chicken_id));
+
+
 
     }
 

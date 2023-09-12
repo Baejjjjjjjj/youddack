@@ -37,4 +37,13 @@ public class ResponseDto {
 
         private List<Flavor> flavorList;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    public static class ListChickenDto{
+
+        private List<ChickenDto> chickenDto;
+
+    }
 }
