@@ -9,6 +9,7 @@ import youddack.app.domain.chicken.domain.common.BaseEntity;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
+@Table(name = "category")
 public class Category extends BaseEntity {
 
     @Id

@@ -8,6 +8,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
+@Table(name = "chickenFlavor")
 public class ChickenFlavor {
 
     @Id
