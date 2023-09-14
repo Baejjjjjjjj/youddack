@@ -1,9 +1,6 @@
 package youddack.app.domain.chicken;
 
-import youddack.app.domain.chicken.domain.Brand;
-import youddack.app.domain.chicken.domain.Category;
-import youddack.app.domain.chicken.domain.Chicken;
-import youddack.app.domain.chicken.domain.Flavor;
+import youddack.app.domain.chicken.domain.*;
 import youddack.app.domain.chicken.dto.ResponseDto;
 
 import java.util.List;
@@ -67,4 +64,39 @@ public class Converter {
                 .build();
     }
 
+    public static ResponseDto.ChickenRecommendDto toChickenRecommendDto(Question question, Answer answer1, Answer answer2){
+
+        return ResponseDto.ChickenRecommendDto.builder()
+                .question_id(question.getId())
+                .question_text(question.getQuestion_text())
+                .answer1_id(answer1.getId())
+                .answer1_text(answer1.getAnswer_text())
+                .answer2_id(answer2.getId())
+                .answer2_text(answer2.getAnswer_text())
+                .build();
+
+    }
+
+    public static ResponseDto.ListChickenRecommendDto toChickenRecommendListDto(List<ResponseDto.ChickenRecommendDto> chickenRecommendDto){
+
+        return ResponseDto.ListChickenRecommendDto.builder()
+                .chickenRecommendDto(chickenRecommendDto)
+                .build();
+    }
+
+    public static ResponseDto.RecommendChickenTypeDto toRecommendChickenTypeDto(Recommendation recommendation, List<RecommendationDescription> recommendationDescriptionList){
+
+        return ResponseDto.RecommendChickenTypeDto.builder()
+                .chicken_type_id(recommendation.getId())
+                .chicken_type_name(recommendation.getName())
+                .chicken_type_image_url(recommendation.getImage_url())
+                .recommendationDescriptions(recommendationDescriptionList)
+                .recommend_chicken1_name(recommendation.getRecommend_chicken1_name())
+                .recommend_chicken1_image_url(recommendation.getRecommend_chicken1_image_url())
+                .recommend_chicken2_name(recommendation.getRecommend_chicken2_name())
+                .recommend_chicken2_image_url(recommendation.getRecommend_chicken2_image_url())
+                .recommend_chicken3_name(recommendation.getRecommend_chicken3_name())
+                .recommend_chicken3_image_url(recommendation.getRecommend_chicken3_image_url())
+                .build();
+    }
 }

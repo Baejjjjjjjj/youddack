@@ -1,4 +1,4 @@
-package youddack.app.domain.chicken;
+package youddack.app.domain.chicken.repository;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.data.domain.Pageable;

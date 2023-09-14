@@ -3,9 +3,7 @@ package youddack.app.domain.chicken.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import youddack.app.domain.chicken.domain.Brand;
-import youddack.app.domain.chicken.domain.Category;
-import youddack.app.domain.chicken.domain.Flavor;
+import youddack.app.domain.chicken.domain.*;
 
 import java.util.List;
 
@@ -86,4 +84,61 @@ public class ResponseDto {
 
         private Brand brand;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    public static class ChickenRecommendDto{
+
+        private Long question_id;
+
+        private String question_text;
+
+        private Long answer1_id;
+
+        private String answer1_text;
+
+        private Long answer2_id;
+
+        private String answer2_text;
+
+
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    public static class ListChickenRecommendDto{
+
+        private List<ChickenRecommendDto> chickenRecommendDto;
+
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    public static class RecommendChickenTypeDto{
+
+        private Long chicken_type_id;
+
+        private String chicken_type_name;
+
+        private String chicken_type_image_url;
+
+        private List<RecommendationDescription> recommendationDescriptions;
+
+        private String recommend_chicken1_name;
+
+        private String recommend_chicken1_image_url;
+
+        private String recommend_chicken2_name;
+
+        private String recommend_chicken2_image_url;
+
+        private String recommend_chicken3_name;
+
+        private String recommend_chicken3_image_url;
+
+    }
+
 }

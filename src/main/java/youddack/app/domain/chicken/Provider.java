@@ -1,17 +1,12 @@
 package youddack.app.domain.chicken;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import youddack.app.config.BaseResponse;
-import youddack.app.domain.chicken.domain.Brand;
-import youddack.app.domain.chicken.domain.Category;
-import youddack.app.domain.chicken.domain.Chicken;
-import youddack.app.domain.chicken.domain.Flavor;
+import youddack.app.domain.chicken.domain.*;
 import youddack.app.domain.chicken.dto.ResponseDto;
-import youddack.app.domain.chicken.repository.BrandRepository;
+import youddack.app.domain.chicken.repository.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +23,14 @@ public class Provider {
     final BrandRepository brandRepository;
 
     final CustomRepository customRepository;
+
+    final QuestionRepository questionRepository;
+
+    final AnswerRepository answerRepository;
+
+    final RecommendationRepository recommendationRepository;
+
+    final RecommendationDescriptionsRepository recommendationDescriptionsRepository;
     /*
     * 치킨 상세 정보 조회
     * */
@@ -122,4 +125,58 @@ public class Provider {
         return toChickenListDto(chickenDtoList);
     }
 
+    public ResponseDto.ListChickenRecommendDto findChickenRecommendList(){
+
+        List<ResponseDto.ChickenRecommendDto> chickenRecommendDtos = new ArrayList<>();
+        for(int i = 1; i < 7; i++) {
+
+            Optional<Question> question = questionRepository.findById(Long.valueOf(i));
+
+
+            List<Answer> answerList = answerRepository.findByQuestionId(question.get().getId());
+
+            chickenRecommendDtos.add(toChickenRecommendDto(question.get(), answerList.get(0), answerList.get(1)));
+
+
+        }
+
+        return toChickenRecommendListDto(chickenRecommendDtos);
+    }
+
+    public ResponseDto.RecommendChickenTypeDto findChickenRecommendType(List<Long> answerList){
+
+       String code = (Long.toString(answerList.get(0)) + Long.toString(answerList.get(1)) + Long.toString(answerList.get(2)) + Long.toString(answerList.get(3)) + Long.toString(answerList.get(4))
+               + Long.toString(answerList.get(5)) + Long.toString(answerList.get(6)));
+
+       System.out.println(code);
+       var id = 0;
+
+       if(code == "10001"||code=="10101"||code == "10111"||code == "11001"){
+           id = 1;
+       }
+       else if(code == "00100"||code=="01000"||code == "01010"||code == "01100"){
+           id = 2;
+       }
+       else if(code == "00010"||code=="00110"||code == "01110"){
+           id = 3;
+       }
+       else if(code == "00000"||code=="00001"||code == "00011"||code == "00101"||code == "00111"||
+               code == "01001"||code == "01011"||code == "01101"||code == "01111"){
+           id = 4;
+       }
+       else if(code == "10100"||code=="10110"||code == "11100"){
+           id = 5;
+       }
+       else if(code == "10000"||code=="10010"||code == "11000"||code == "11010"||code == "11110"){
+           id = 6;
+       }else{
+            id = 7;
+       }
+
+       Optional<Recommendation> recommendation = recommendationRepository.findById(Long.valueOf(id));
+       List<RecommendationDescription> recommendationDescriptions = recommendationDescriptionsRepository.findByRecommendationId(recommendation.get().getId());
+
+       return toRecommendChickenTypeDto(recommendation.get(), recommendationDescriptions);
+
+    }
 }
