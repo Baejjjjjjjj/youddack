@@ -36,6 +36,15 @@ public class Controller {
 
     }
 
+    @Operation(summary = "치킨 추천!", description = "치킨 추천 API")
+    @GetMapping("/recommendation/list")
+    public BaseResponse<String> GetChickenRecommendationList(){
+
+
+        return null;
+
+    }
+
 
     /**
      * 치킨 리스트 API
