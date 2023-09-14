@@ -7,11 +7,10 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import youddack.app.config.BaseResponse;
+import youddack.app.domain.chicken.dto.RequestDto;
 import youddack.app.domain.chicken.dto.ResponseDto;
 
 import java.util.List;
@@ -48,10 +47,17 @@ public class Controller {
 
     @Operation(summary = "치킨 리스트", description = "치킨 리스트 API")
     @GetMapping("/list")
-    public BaseResponse<String> GetChickenList(){
+    public BaseResponse<ResponseDto.ListChickenDto> GetChickenList( RequestDto.FindChickenDto request){
 
 
-        return null;
+        //Brand별 치킨 리스트조회
+        if(request.getBrand_id() != null&&request.getBrand_id()!=0){
+            return new BaseResponse<>(provider.findBrandChickenList(request.getChicken_id(), request.getBrand_id()));
+        }
+
+        return new BaseResponse<>(provider.findChickenList(request.getChicken_id(), request.getBrand_id(), request.getFlavor() ,
+               request.getCategory_name(), request.getPart_name(), request.getStart_price(), request.getEnd_price() , request.getSort_id()));
+
 
     }
 
@@ -63,7 +69,7 @@ public class Controller {
 
     @Operation(summary = "치킨 비교 ", description = "치킨 비교 API")
     @GetMapping("/comparison")
-    public BaseResponse<ResponseDto.ListChickenDto> GetChickenComparison(@NotEmpty @RequestParam @Size(min=1, max= 4) List<Long> chicken_id){
+    public BaseResponse<ResponseDto.ListChickenDetailDto> GetChickenComparison(@NotEmpty @RequestParam @Size(min=1, max= 4) List<Long> chicken_id){
 
         return new BaseResponse<>(provider.findChickenComparisonList(chicken_id));
 
@@ -79,7 +85,7 @@ public class Controller {
 
     @Operation(summary = "치킨 상세 정보", description = "치킨 상세 정보 API")
     @GetMapping("/")
-    public BaseResponse<ResponseDto.ChickenDto> GetChickenDetail(@NotEmpty @RequestParam Long chickenId){
+    public BaseResponse<ResponseDto.ChickenDetailDto> GetChickenDetail(@NotEmpty @PathVariable Long chickenId){
 
         return new BaseResponse<>(provider.findChickenDetail(chickenId));
 
