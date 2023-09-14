@@ -28,7 +28,7 @@ public class Controller {
      * [GET] /chicken/recommendation
      * @return BaseResponse<String>
      * */
-    @Operation(summary = "치킨 추천", description = "치킨 추천 API")
+    @Operation(summary = "치킨 추천!", description = "치킨 추천 API")
     @GetMapping("/recommendation")
     public BaseResponse<String> GetChickenRecommendation(){
 
