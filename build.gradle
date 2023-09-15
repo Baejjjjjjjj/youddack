@@ -54,6 +54,7 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+
 def querydslDir = "$buildDir/generated/querydsl"
 
 sourceSets {
@@ -66,7 +67,7 @@ tasks.withType(JavaCompile) {
 
 clean.doLast {
 	file(querydslDir).deleteDir()
-}
+
 
 configurations { // 이놈
 	compileOnly {
@@ -74,11 +75,6 @@ configurations { // 이놈
 
 
 	}
-
-
-}
-
-
 
 jar {
 	enabled = false
