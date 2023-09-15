@@ -86,8 +86,14 @@ public class Controller {
     @GetMapping("/comparison")
     public BaseResponse<ResponseDto.ListChickenDetailDto> GetChickenComparison(HttpServletRequest request){
 
-        System.out.println("cookie 갯수:"+request.getCookies().length);
+
         Cookie[] cookies = request.getCookies();
+
+        if(cookies==null){
+
+            return null;
+        }
+
         List<Long> chicken_ids = new ArrayList<>();
         for(Cookie c: cookies){
             System.out.println("쿠키 값: "+ c.getValue());
@@ -100,28 +106,38 @@ public class Controller {
 
     @Operation(summary = "비교함 추가 ", description = "치킨 비교함에 추가")
     @PostMapping("/comparison")
-    public BaseResponse<String> PostChickenComparison(HttpServletRequest request, Long chicken_id, HttpServletResponse response){
+    public BaseResponse<String> PostChickenComparison(HttpServletRequest request, Long arg1, HttpServletResponse response){
 
         Cookie[] cookie = request.getCookies();
 
-        if(cookie==null||cookie.length<4){
-            for(int i = 0; i < cookie.length; i++){
-                if(cookie[i].getValue()==String.valueOf(chicken_id)){
-                    return new BaseResponse<>(ALREADY_IN_COMPARISON);
-                }
-            }
 
-            Cookie comparisonCookie = new Cookie("chicken_id"+String.valueOf(chicken_id),chicken_id.toString());
+        if(cookie==null||cookie.length<4){
+
+            Cookie comparisonCookie = new Cookie("chicken_id"+String.valueOf(arg1),arg1.toString());
             comparisonCookie.setPath("/");
             comparisonCookie.setMaxAge(60*60);
             response.addCookie(comparisonCookie);
 
         }
+        else if(cookie.length<4){
+
+            if(cookie.length!=0) {
+                for (int i = 0; i < cookie.length; i++) {
+                    if (cookie[i].getValue() == String.valueOf(arg1)) {
+                        return new BaseResponse<>(ALREADY_IN_COMPARISON);
+                    }
+                }
+            }
+            Cookie comparisonCookie = new Cookie("chicken_id"+String.valueOf(arg1),arg1.toString());
+            comparisonCookie.setPath("/");
+            comparisonCookie.setMaxAge(60*60);
+            response.addCookie(comparisonCookie);
+        }
         else if(cookie.length>=4){
             return new BaseResponse<>(OVER_IN_COMPARISON);
         }
 
-        return new BaseResponse<>("쿠키에 chicken_id 저장 완료\n 치킨 id = "+ chicken_id);
+        return new BaseResponse<>("쿠키에 chicken_id 저장 완료\n 치킨 id = "+ arg1);
     }
 
     @Operation(summary = "비교함 삭제", description = "비교함에서 치킨 정보를 삭제한다. ")
@@ -130,15 +146,19 @@ public class Controller {
 
         Cookie[] cookies = request.getCookies();
 
-        boolean here = false;
-        for(Cookie c: cookies) {
-            if (c.getValue().equals(String.valueOf(chicken_id))){
-                here = true;
-            }
-        }
 
-        if(here == false){
-            return new BaseResponse<>(NOT_IN_COMPARISON);
+        if(cookies!=null) {
+            boolean here = false;
+            for (Cookie c : cookies) {
+                if (c.getValue().equals(String.valueOf(chicken_id))) {
+                    here = true;
+                }
+            }
+
+            if (here == false) {
+                return new BaseResponse<>(NOT_IN_COMPARISON);
+            }
+
         }
 
         System.out.println("chicken_id"+String.valueOf(chicken_id));
@@ -147,7 +167,8 @@ public class Controller {
         cookie.setPath("/");
         response.addCookie(cookie);
 
-        return new BaseResponse<>("cookie 삭제 성공! 총 쿠키 갯수: "+String.valueOf(request.getCookies().length-1));
+
+        return new BaseResponse<>("cookie 삭제 성공");
     }
 
     /**
@@ -158,8 +179,9 @@ public class Controller {
 
     @Operation(summary = "치킨 상세 정보", description = "치킨 상세 정보 API")
     @GetMapping("/")
-    public BaseResponse<ResponseDto.ChickenDetailDto> GetChickenDetail(@NotEmpty @PathVariable Long arg0){
+    public BaseResponse<ResponseDto.ChickenDetailDto> GetChickenDetail(Long arg0){
 
+        System.out.println(arg0);
         return new BaseResponse<>(provider.findChickenDetail(arg0));
 
     }

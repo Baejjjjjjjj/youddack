@@ -58,7 +58,7 @@ public class CustomRepository  {
                             chickenCategory.category.id.eq(category.id),
                             chicken.id.gt(chicken_id),
                             builder)
-                    .orderBy(NumberExpression.random().asc())
+                    .orderBy()
                     .limit(10)
                     .fetch();
 

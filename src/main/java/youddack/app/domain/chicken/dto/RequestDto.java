@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Builder
 public class RequestDto {
 
     @Schema(description = "Chicken 리스트 조회 Dto")
