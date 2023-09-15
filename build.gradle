@@ -54,13 +54,14 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 /*
-def querydslDir = "$buildDir/generated/querydsl"
-querydsl { //이놈
-	jpa = true
-	querydslSourcesDir = querydslDir
+def generated = "src/main/generated"
+
+tasks.withType(JavaCompile) {
+	options.getGeneratedSourceOutputDirectory().set(file(generated))
 }
+
 sourceSets {
-	main.java.srcDir querydslDir
+	main.java.srcDirs += [ generated ]
 }
 
 */
@@ -71,18 +72,12 @@ configurations { // 이놈
 
 	}
 
-	//querydsl.extendsFrom compileClasspath
+}
 
-}
-/*
-compileQuerydsl { // 이놈
-	options.annotationProcessorPath = configurations.querydsl
-}
 
 clean {
-	delete file('src/main/generated')
+	delete file(generated)
 }
-*/
 jar {
 	enabled = false
 }
