@@ -75,6 +75,7 @@ configurations { // 이놈
 
 
 	}
+}
 
 jar {
 	enabled = false
