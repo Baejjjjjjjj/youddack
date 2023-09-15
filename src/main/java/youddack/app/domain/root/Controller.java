@@ -21,4 +21,11 @@ public class Controller {
         System.out.println("health check success");
         return new BaseResponse<>(Code.SUCCESS);
     }
+
+    @GetMapping("/health")
+    public BaseResponse<String> GetHealth(){
+
+        System.out.println("health check success");
+        return new BaseResponse<>(Code.SUCCESS);
+    }
 }
