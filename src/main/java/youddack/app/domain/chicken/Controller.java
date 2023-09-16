@@ -85,27 +85,15 @@ public class Controller {
 
     @Operation(summary = "치킨 비교 ", description = "치킨 비교 API")
     @GetMapping("/comparison")
-    public BaseResponse<ResponseDto.ListChickenDetailDto> GetChickenComparison(HttpServletRequest request){
+    public BaseResponse<ResponseDto.ListChickenDetailDto> GetChickenComparison(@RequestParam @Size(min = 0, max = 4) List<Long> chicken_id_list){
 
-
-        Cookie[] cookies = request.getCookies();
-
-        if(cookies==null){
-
-            return null;
-        }
-
-        List<Long> chicken_ids = new ArrayList<>();
-        for(Cookie c: cookies){
-            System.out.println("쿠키 값: "+ c.getValue());
-            chicken_ids.add(Long.valueOf(c.getValue()));
-
-        }
-        return new BaseResponse<>(provider.findChickenComparisonList(chicken_ids));
+        return new BaseResponse<>(provider.findChickenComparisonList(chicken_id_list));
 
     }
 
+    /*
     @Operation(summary = "비교함 추가 ", description = "치킨 비교함에 추가")
+
     @PostMapping("/comparison")
     public BaseResponse<String> PostChickenComparison(HttpServletRequest request, Long arg1, HttpServletResponse response){
 
@@ -171,7 +159,7 @@ public class Controller {
 
         return new BaseResponse<>("cookie 삭제 성공");
     }
-
+           */
     /**
      * 치킨 상세 정보 API
      * [GET] /chicken/{chicken_id}
