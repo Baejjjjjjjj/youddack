@@ -24,6 +24,7 @@ import java.util.Optional;
 import static youddack.app.config.Code.*;
 
 @Slf4j
+@CrossOrigin
 @Tag(name = "치킨")
 @RequestMapping("/chicken")
 @RestController
