@@ -145,8 +145,7 @@ public class Provider {
 
     public ResponseDto.RecommendChickenTypeDto findChickenRecommendType(List<Long> answerList){
 
-       String code = (Long.toString(answerList.get(0)) + Long.toString(answerList.get(1)) + Long.toString(answerList.get(2)) + Long.toString(answerList.get(3)) + Long.toString(answerList.get(4))
-               + Long.toString(answerList.get(5)) + Long.toString(answerList.get(6)));
+       String code = (Long.toString(answerList.get(0)) + Long.toString(answerList.get(1)) + Long.toString(answerList.get(2)) + Long.toString(answerList.get(3)) + Long.toString(answerList.get(4)));
 
        System.out.println(code);
        var id = 0;
