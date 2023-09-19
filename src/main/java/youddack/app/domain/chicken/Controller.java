@@ -1,27 +1,17 @@
 package youddack.app.domain.chicken;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import youddack.app.config.BaseResponse;
-import youddack.app.domain.chicken.domain.Answer;
 import youddack.app.domain.chicken.dto.RequestDto;
 import youddack.app.domain.chicken.dto.ResponseDto;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import static youddack.app.config.Code.*;
 
 @Slf4j
 @CrossOrigin
@@ -39,6 +29,9 @@ public class Controller {
      * @return BaseResponse<String>
      * */
     @Operation(summary = "치킨 추천", description = "치킨 추천 API")
+    @Parameters({
+        @Parameter(name = "arg0", description = "치킨 추천 정답 List", required = true)
+    })
     @GetMapping("/recommendation")
     public BaseResponse<ResponseDto.RecommendChickenTypeDto> GetChickenRecommendation(@RequestParam @Size(min =7, max = 7) List<Long> arg0){
         System.out.println("isHere"+arg0.get(0));
@@ -62,6 +55,14 @@ public class Controller {
      * */
 
     @Operation(summary = "치킨 리스트", description = "치킨 리스트 API")
+    @Parameters({
+            @Parameter(name = "request", description = "chicken_id: chikcen id  "+
+                    "\t\nsort_id(0) = 추천순 \t\nsort_id(0) = 가격 낮은 순 \t\nsort_id(0) = 열량 낮은 순\t\nsort_id(0) = 가격 높은순  "
+            + "\t\nbrand_id: 브랜드 id  " +"\t\ncategory_id: 카테고리 이름  " + "\t\npart_name: 부위 이름  "
+
+            +"\t\nList<flavor>: 맛 필터링 정렬  " + "\t\nstart_price: 시작 금액, 최소 0\t\nend_price: 최대 금액")
+
+    })
     @GetMapping("/list")
     public BaseResponse<ResponseDto.ListChickenDto> GetChickenList( RequestDto.FindChickenDto request){
 
@@ -84,6 +85,7 @@ public class Controller {
      * */
 
     @Operation(summary = "치킨 비교 ", description = "치킨 비교 API")
+    @Parameter(name = "chicken_id_list", description = "치킨 id 리스트")
     @GetMapping("/comparison")
     public BaseResponse<ResponseDto.ListChickenDetailDto> GetChickenComparison(@RequestParam @Size(min = 0, max = 4) List<Long> chicken_id_list){
 
@@ -91,75 +93,6 @@ public class Controller {
 
     }
 
-    /*
-    @Operation(summary = "비교함 추가 ", description = "치킨 비교함에 추가")
-
-    @PostMapping("/comparison")
-    public BaseResponse<String> PostChickenComparison(HttpServletRequest request, Long arg1, HttpServletResponse response){
-
-        Cookie[] cookie = request.getCookies();
-
-
-        if(cookie==null||cookie.length<4){
-
-            Cookie comparisonCookie = new Cookie("chicken_id"+String.valueOf(arg1),arg1.toString());
-            comparisonCookie.setPath("/");
-            comparisonCookie.setMaxAge(60*60);
-            response.addCookie(comparisonCookie);
-
-        }
-        else if(cookie.length<4){
-
-            if(cookie.length!=0) {
-                for (int i = 0; i < cookie.length; i++) {
-                    if (cookie[i].getValue() == String.valueOf(arg1)) {
-                        return new BaseResponse<>(ALREADY_IN_COMPARISON);
-                    }
-                }
-            }
-            Cookie comparisonCookie = new Cookie("chicken_id"+String.valueOf(arg1),arg1.toString());
-            comparisonCookie.setPath("/");
-            comparisonCookie.setMaxAge(60*60);
-            response.addCookie(comparisonCookie);
-        }
-        else if(cookie.length>=4){
-            return new BaseResponse<>(OVER_IN_COMPARISON);
-        }
-
-        return new BaseResponse<>("쿠키에 chicken_id 저장 완료\n 치킨 id = "+ arg1);
-    }
-
-    @Operation(summary = "비교함 삭제", description = "비교함에서 치킨 정보를 삭제한다. ")
-    @DeleteMapping("/comparison")
-    public BaseResponse<String> DeleteChickenComparison(HttpServletRequest request, @RequestParam(required = true) Long chicken_id, HttpServletResponse response){
-
-        Cookie[] cookies = request.getCookies();
-
-
-        if(cookies!=null) {
-            boolean here = false;
-            for (Cookie c : cookies) {
-                if (c.getValue().equals(String.valueOf(chicken_id))) {
-                    here = true;
-                }
-            }
-
-            if (here == false) {
-                return new BaseResponse<>(NOT_IN_COMPARISON);
-            }
-
-        }
-
-        System.out.println("chicken_id"+String.valueOf(chicken_id));
-        Cookie cookie = new Cookie("chicken_id"+String.valueOf(chicken_id),null);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-
-
-        return new BaseResponse<>("cookie 삭제 성공");
-    }
-           */
     /**
      * 치킨 상세 정보 API
      * [GET] /chicken/{chicken_id}
@@ -167,12 +100,13 @@ public class Controller {
      * */
 
     @Operation(summary = "치킨 상세 정보", description = "치킨 상세 정보 API")
+    @Parameter(name="arg0", description = "chicken_id")
     @GetMapping("/")
     public BaseResponse<ResponseDto.ChickenDetailDto> GetChickenDetail(Long arg0){
 
-        System.out.println(arg0);
         return new BaseResponse<>(provider.findChickenDetail(arg0));
 
     }
+
 
 }
