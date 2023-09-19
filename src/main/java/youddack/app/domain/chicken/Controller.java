@@ -57,10 +57,11 @@ public class Controller {
     @Operation(summary = "치킨 리스트", description = "치킨 리스트 API")
     @Parameters({
             @Parameter(name = "request", description = "chicken_id: chikcen id  "+
-                    "\t\nsort_id(0) = 추천순 \t\nsort_id(0) = 가격 낮은 순 \t\nsort_id(0) = 열량 낮은 순\t\nsort_id(0) = 가격 높은순  "
+                    "\t\nsort_id(0) = 추천순 \t\nsort_id(1) = 가격 낮은 순 \t\nsort_id(2) = 열량 낮은 순\t\nsort_id(3) = 가격 높은순  "
             + "\t\nbrand_id: 브랜드 id  " +"\t\ncategory_id: 카테고리 이름  " + "\t\npart_name: 부위 이름  "
 
-            +"\t\nList<flavor>: 맛 필터링 정렬  " + "\t\nstart_price: 시작 금액, 최소 0\t\nend_price: 최대 금액")
+            +"\t\nList<flavor>: 맛 필터링 정렬  (필터링이 없을 시 \"\"" +
+                    " 다음과 같이 empty string을 입력하세요" + "\t\nstart_price: 시작 금액, 최소 0\t\nend_price: 최대 금액")
 
     })
     @GetMapping("/list")
@@ -85,7 +86,7 @@ public class Controller {
      * */
 
     @Operation(summary = "치킨 비교 ", description = "치킨 비교 API")
-    @Parameter(name = "chicken_id_list", description = "치킨 id 리스트")
+    @Parameter(name = "chicken_id_list", description = "치킨 id 리스트", example = "[1,2,3,4]")
     @GetMapping("/comparison")
     public BaseResponse<ResponseDto.ListChickenDetailDto> GetChickenComparison(@RequestParam @Size(min = 0, max = 4) List<Long> chicken_id_list){
 
@@ -100,7 +101,7 @@ public class Controller {
      * */
 
     @Operation(summary = "치킨 상세 정보", description = "치킨 상세 정보 API")
-    @Parameter(name="arg0", description = "chicken_id")
+    @Parameter(name="arg0", description = "chicken_id",example = "1")
     @GetMapping("/")
     public BaseResponse<ResponseDto.ChickenDetailDto> GetChickenDetail(Long arg0){
 

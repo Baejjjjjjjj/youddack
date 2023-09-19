@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Data
 @Builder
 public class RequestDto {
 
@@ -21,36 +22,40 @@ public class RequestDto {
 
 
 
+        @Schema(description = "chicken_id", defaultValue = "0")
         @Builder.Default
         @NotEmpty
         private Long chicken_id =Long.valueOf(0);
 
+        @Schema(description = "sort_id", defaultValue = "1")
         @Builder.Default
         private Integer sort_id = 0;
 
+        @Schema(description = "brand_id", defaultValue = "0")
         @Builder.Default
         private Long brand_id = Long.valueOf(0);
 
 
-        @Schema(defaultValue = " ")
+        @Schema(description = "category_id", defaultValue = " ")
         @Builder.Default
         private String category_name="";
 
-        @Schema(defaultValue = " ")
+        @Schema(description = "part_name", defaultValue = " ")
         @Builder.Default
         private String part_name="";
 
         @Builder.Default
-        @Schema(defaultValue = "")
+        @Schema(defaultValue = "", example = "")
         @Size(min=1, max = 3)
         private List<String> flavor= Arrays.asList(new String[]{""});
 
         @Size(min = 0, max = 20000)
-        @Schema(defaultValue = "0")
+        @Schema(defaultValue = "0",example = "0")
         @Builder.Default
         private Integer start_price=-1;
 
         @Size(min= 5000, max = 50000)
+        @Schema(defaultValue = "40000", example = "40000")
         @Builder.Default
         private Integer end_price=0;
 
