@@ -25,7 +25,7 @@ public class Chicken extends BaseEntity {
 
     private String allergy;
 
-    private String capacity;
+    private Integer capacity;
 
     private String part;
 

@@ -13,7 +13,7 @@ public class Converter {
         return ResponseDto.ChickenDetailDto.builder()
                 .chicken_id(chicken.getId())
                 .chicken_allergy(chicken.getAllergy())
-                .chicken_capacity(chicken.getCapacity())
+                .chicken_capacity(chicken.getCapacity().toString()+"호")
                 .chicken_name(chicken.getName())
                 .chicken_part(chicken.getPart())
                 .chicken_price(chicken.getPrice())
