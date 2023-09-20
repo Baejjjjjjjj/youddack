@@ -30,7 +30,7 @@ public class Controller {
      * */
     @Operation(summary = "치킨 추천", description = "치킨 추천 API")
     @Parameters({
-        @Parameter(name = "arg0", description = "치킨 추천 정답 List, 맞을 시 1 틀릴 시 0", required = true, example = "[1,0,0,0,0]")
+        @Parameter(name = "arg0", description = "치킨 추천 정답 List, 첫번째 응답 선택 시 1 두번째 응답 선택 시 0", required = true, example = "[1,0,0,0,0]")
     })
     @GetMapping("/recommendation")
     public BaseResponse<ResponseDto.RecommendChickenTypeDto> GetChickenRecommendation(@RequestParam @Size(min =5, max = 5) List<Long> arg0){
