@@ -128,7 +128,7 @@ public class Provider {
     public ResponseDto.ListChickenRecommendDto findChickenRecommendList(){
 
         List<ResponseDto.ChickenRecommendDto> chickenRecommendDtos = new ArrayList<>();
-        for(int i = 1; i < 7; i++) {
+        for(int i = 1; i < 6; i++) {
 
             Optional<Question> question = questionRepository.findById(Long.valueOf(i));
 
