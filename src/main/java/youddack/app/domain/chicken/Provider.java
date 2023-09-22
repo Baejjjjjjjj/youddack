@@ -82,6 +82,7 @@ public class Provider {
         for(int i = 0; i < chickenList.size(); i++){
 
             Long chicken_ids = chickenList.get(i).getId();
+            System.out.println(chicken_ids);
             List<Flavor> flavorList = repository.findByChickenIdJoinFlavor(chicken_ids);
             chickenDtoList.add(toChickenDto(chickenList.get(i), flavorList));
         }
@@ -90,15 +91,27 @@ public class Provider {
 
     }
 
-    public ResponseDto.ListChickenDto findChickenList(Long chicken_id, Long brand_id, List<String> flavorList,String category_name, String part_name, Integer start_price, Integer end_price, Integer sort_id){
+    public ResponseDto.ListChickenDto findChickenList(Long chicken_id, Long brand_id, List<String> flavorList,String category_name, String part_name, Integer start_price, Integer end_price, Integer sort_id, String chicken_name){
 
         if(sort_id==0&&chicken_id==0){
 
             List<ResponseDto.ChickenDto> RecommendDtoList = new ArrayList<>();
-            List<String> RecommendChickenNameList = Arrays.asList(new String[]{"고추바사삭 윙","황금올리브치킨","간장마늘치킨","허니콤보","파채소이살살","알싸한마늘치킨","엄청큰후라이드","XO양념치킨","타코마요치킨"});
+            List<Long> RecommendChickenNameList = new ArrayList<Long>();//
+            RecommendChickenNameList.add(Long.valueOf(16));
+            RecommendChickenNameList.add(Long.valueOf(97));
+            RecommendChickenNameList.add(Long.valueOf(261));
+            RecommendChickenNameList.add(Long.valueOf(308));
+            RecommendChickenNameList.add(Long.valueOf(320));
+            RecommendChickenNameList.add(Long.valueOf(357));
+            RecommendChickenNameList.add(Long.valueOf(359));
+            RecommendChickenNameList.add(Long.valueOf(400));
+            RecommendChickenNameList.add(Long.valueOf(454));
+            RecommendChickenNameList.add(Long.valueOf(420));
+            // Long.valueOf(16),97,261,308,320,357,359,400,454);
             for(int i = 0; i < 10; i++){
-
-                Chicken chicken = repository.findByChickenName(RecommendChickenNameList.get(i));
+                System.out.print(i);
+                Optional<Chicken> chickens = repository.findById(RecommendChickenNameList.get(i));
+                Chicken chicken = chickens.get();
                 List<Flavor> recommendFlavorList = repository.findByChickenIdJoinFlavor(chicken.getId());
                 RecommendDtoList.add(toChickenDto(chicken, recommendFlavorList));
             }
@@ -110,8 +123,8 @@ public class Provider {
         String sort = "";
 
         Pageable pageable = PageRequest.of(0,10);
-        List<Chicken> chickenList = customRepository.selectChickenList(chicken_id,category_name,part_name,start_price,end_price,sort_id);
-
+        List<Chicken> chickenList = customRepository.selectChickenList(chicken_id,category_name,part_name,start_price,end_price,sort_id,flavorList,chicken_name);
+        System.out.println(chickenList.size());
 
         List<ResponseDto.ChickenDto> chickenDtoList = new ArrayList<>();
         for(int i = 0; i < chickenList.size();i++){

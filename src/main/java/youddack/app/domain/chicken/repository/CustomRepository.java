@@ -1,6 +1,8 @@
 package youddack.app.domain.chicken.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AllArgsConstructor;
@@ -20,7 +22,7 @@ public class CustomRepository  {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<Chicken> selectChickenList(Long chicken_id,String category_name, String part_name, Integer start_price, Integer end_price, Integer sort_id){
+    public List<Chicken> selectChickenList(Long chicken_id,String category_name, String part_name, Integer start_price, Integer end_price, Integer sort_id, List<String> flavorList, String chicken_name){
 
         QChicken chicken = QChicken.chicken;
 
@@ -28,18 +30,63 @@ public class CustomRepository  {
 
         QCategory category = QCategory.category;
 
+        QChickenFlavor chickenFlavor = QChickenFlavor.chickenFlavor;
+
+        QFlavor flavor = QFlavor.flavor;
+
         BooleanBuilder builder = new BooleanBuilder();
 
         BooleanBuilder sortBuilder = new BooleanBuilder();
+
+
+
+        if(chicken_name!="" || chicken_name!=null){
+
+            System.out.println("chicken_name: "+chicken_name);
+            builder.and(chicken.name.contains(chicken_name));
+
+            List<Chicken> chickenList = queryFactory.select(chicken).distinct()
+                    .from(chickenCategory)
+                    .join(chickenCategory.chicken, chicken)
+                    .join(chickenCategory.category, category)
+                    .where(chickenCategory.chicken.id.eq(chicken.id),
+                            chickenCategory.category.id.eq(category.id),
+                            chicken.id.gt(chicken_id),
+                            builder)
+                    .orderBy(chicken.id.asc())
+                    .limit(10).stream().toList();
+
+            return chickenList;
+
+        }
+
 
         if(category_name!=""){
             System.out.println("category_name"+category_name);
             builder.and(category.name.eq(category_name));
         }
 
+        if(flavorList!=null){
+            System.out.println("맛 필터링 들어간다 확마");
+            for (int i = 0; i < flavorList.size();i++){
+
+                System.out.println("맛 필터링:"+ flavorList.get(i));
+                if(i ==0){
+                    builder.and(flavor.name.eq(flavorList.get(i)));
+                }
+                else if(i==1){
+                    builder.or(flavor.name.eq(flavorList.get(i)));
+                }else if (i==2) {builder.or(flavor.name.eq(flavorList.get(i)));;
+
+                }
+
+            }
+
+        }
+
         if(part_name!=""){
             System.out.println("part_name"+part_name);
-            builder.and(chicken.name.eq(part_name));
+            builder.and(chicken.part.eq(part_name));
         }
 
         if(start_price!=-1&&end_price!=0){
@@ -48,25 +95,32 @@ public class CustomRepository  {
             builder.and(chicken.price.loe(end_price));
         }
 
-        if(sort_id==0){
 
-            List<Chicken> chickenList = queryFactory.select(chicken)
+        if(sort_id==0){
+            //querydsl 은 예전버전에서는 연관관계없인 조인을 허락하지 않았다.
+            List<Chicken> chickenList = queryFactory.select(chickenCategory.chicken).distinct()
                     .from(chickenCategory)
                     .join(chickenCategory.chicken, chicken)
                     .join(chickenCategory.category, category)
+                    .innerJoin(chickenFlavor).on(chickenCategory.chicken.id.eq(chickenFlavor.chicken.id))
+                    .innerJoin(chickenFlavor.flavor).on(chickenFlavor.flavor.id.eq(flavor.id))
                     .where(chickenCategory.chicken.id.eq(chicken.id),
                             chickenCategory.category.id.eq(category.id),
                             chicken.id.gt(chicken_id),
                             builder)
-                    .orderBy()
-                    .limit(10)
-                    .fetch();
+                    .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
+                     .limit(10).fetch().stream().toList();
+
 
             return chickenList;
 
         }
         if(sort_id==1){
-            List<Chicken> chickenList = queryFactory.select(chicken)
+
+            System.out.println(chicken.id);
+            System.out.println(category.id);
+            System.out.println(chicken_id);
+            List<Chicken> chickenList = queryFactory.select(chickenCategory.chicken).distinct()
                     .from(chickenCategory)
                     .join(chickenCategory.chicken, chicken)
                     .join(chickenCategory.category, category)
@@ -75,14 +129,14 @@ public class CustomRepository  {
                             chicken.id.gt(chicken_id),
                             builder)
                     .orderBy(chicken.price.asc())
-                    .limit(10)
-                    .fetch();
+                    .limit(10).stream().toList();
 
+            System.out.println("size:"+chickenList.size());
             return chickenList;
         }
         if(sort_id==2){
 
-            List<Chicken> chickenList = queryFactory.select(chicken)
+            List<Chicken> chickenList = queryFactory.select(chickenCategory.chicken).distinct()
                     .from(chickenCategory)
                     .join(chickenCategory.chicken, chicken)
                     .join(chickenCategory.category, category)
@@ -91,24 +145,23 @@ public class CustomRepository  {
                             chicken.id.gt(chicken_id),
                             builder)
                     .orderBy(chicken.capacity.asc())
-                    .limit(10)
-                    .fetch();
+                    .limit(10).stream().toList();
+
 
             return chickenList;
         }
 
         if(sort_id==3) {
-            List<Chicken> chickenList = queryFactory.select(chicken)
+            List<Chicken> chickenList = queryFactory.select(chickenCategory.chicken).distinct()
                     .from(chickenCategory)
-                    .join(chickenCategory.chicken, chicken)
+                    .join(chickenCategory.chicken, chicken).limit(10)
                     .join(chickenCategory.category, category)
                     .where(chickenCategory.chicken.id.eq(chicken.id),
                             chickenCategory.category.id.eq(category.id),
                             chicken.id.gt(chicken_id),
                             builder)
                     .orderBy(chicken.price.desc())
-                    .limit(10)
-                    .fetch();
+                    .stream().toList();
 
             return chickenList;
         }
@@ -145,7 +198,7 @@ public class CustomRepository  {
                         (chickenFlavor.chicken.id.eq(chicken_id))
                                 .and(builder)
                 )
-                .fetch();
+                .stream().toList();
 
         return flavorLists;
 
