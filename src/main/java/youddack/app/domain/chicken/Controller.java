@@ -58,7 +58,7 @@ public class Controller {
     @Parameters({
             @Parameter(name = "request", description = "chicken_id: chikcen id  "+
                     "\t\nsort_id(0) = 추천순 \t\nsort_id(1) = 가격 낮은 순 \t\nsort_id(2) = 열량 낮은 순\t\nsort_id(3) = 가격 높은순  "
-            + "\t\nbrand_id: 브랜드 id  " +"\t\ncategory_id: 카테고리 이름  " + "\t\npart_name: 부위 이름  "
+            + "\t\nbrand_id: 브랜드 id  " +"\t\nchicken_name: 치킨 이름 (치킨 이름을 통한 검색 가능)"+"\t\ncategory_id: 카테고리 이름  " + "\t\npart_name: 부위 이름  "
 
             +"\t\nList<flavor>: 맛 필터링 정렬  (필터링이 없을 시 \"\"" +
                     " 다음과 같이 empty string을 입력하세요" + "\t\nstart_price: 시작 금액, 최소 0\t\nend_price: 최대 금액")
@@ -74,7 +74,7 @@ public class Controller {
         }
 
         return new BaseResponse<>(provider.findChickenList(request.getChicken_id(), request.getBrand_id(), request.getFlavor() ,
-               request.getCategory_name(), request.getPart_name(), request.getStart_price(), request.getEnd_price() , request.getSort_id()));
+               request.getCategory_name(), request.getPart_name(), request.getStart_price(), request.getEnd_price() , request.getSort_id(), request.getChicken_name()));
 
 
     }

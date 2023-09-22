@@ -35,6 +35,9 @@ public class RequestDto {
         @Builder.Default
         private Long brand_id = Long.valueOf(0);
 
+        @Schema(description = "chicken_id", defaultValue = " ")
+        @Builder.Default
+        private String chicken_name="";
 
         @Schema(description = "category_id", defaultValue = " ")
         @Builder.Default
