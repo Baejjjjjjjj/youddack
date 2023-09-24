@@ -71,9 +71,16 @@ public class Controller {
 
         //Brand별 치킨 리스트조회
         if(request.getBrand_id()!= null&&request.getBrand_id()!=0){
-            System.out.println("brand_id");
+            System.out.println("Brand별 치킨 리스트 조회입니다.");
             return new BaseResponse<>(provider.findBrandChickenList(request.getChicken_id(), request.getBrand_id()));
         }
+
+        if(request.getChicken_name()!=null||!request.getChicken_name().isBlank()){
+
+            return new BaseResponse<>(provider.findChickenListWithName(request.getChicken_id(),request.getChicken_name()));
+        }
+
+
 
         return new BaseResponse<>(provider.findChickenList(request.getChicken_id(), request.getBrand_id(), request.getFlavor() ,
                request.getCategory_name(), request.getPart_name(), request.getStart_price(), request.getEnd_price() , request.getSort_id(), request.getChicken_name()));

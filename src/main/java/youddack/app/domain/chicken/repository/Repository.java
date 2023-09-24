@@ -32,4 +32,6 @@ public interface Repository extends JpaRepository<Chicken, Long> {
     List<Chicken> findChickenListLimitAndBrand(@Param("chicken_id") Long chicken_id, @Param("id")Long id,  Pageable pageable);
 
 
+    @Query("select c from Chicken c where c.id>:id and c.name like %:name%")
+    List<Chicken>findAllByIdAndByChickenName(@Param("id")Long chicken_id,@Param("name") String chicken_name,Pageable pageable);
 }
