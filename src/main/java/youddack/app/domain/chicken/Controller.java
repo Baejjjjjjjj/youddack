@@ -67,9 +67,11 @@ public class Controller {
     @GetMapping("/list")
     public BaseResponse<ResponseDto.ListChickenDto> GetChickenList( RequestDto.FindChickenDto request){
 
+        System.out.println("brand_id");
 
         //Brand별 치킨 리스트조회
-        if(request.getBrand_id() != null&&request.getBrand_id()!=0){
+        if(request.getBrand_id()!= null&&request.getBrand_id()!=0){
+            System.out.println("brand_id");
             return new BaseResponse<>(provider.findBrandChickenList(request.getChicken_id(), request.getBrand_id()));
         }
 

@@ -72,11 +72,10 @@ public class Provider {
 
     public ResponseDto.ListChickenDto findBrandChickenList(Long chicken_id, Long brand_id){
 
+        System.out.println("brand");
         Pageable pageable =  PageRequest.of(0,10);
 
-        //Optional<Brand> brand = brandRepository.findById(brand_id);
-
-        List<Chicken> chickenList = repository.findChickenListLimit(chicken_id,pageable);
+        List<Chicken> chickenList = repository.findChickenListLimitAndBrand(chicken_id,brand_id,pageable);
 
         List<ResponseDto.ChickenDto> chickenDtoList = new ArrayList<>();
         for(int i = 0; i < chickenList.size(); i++){

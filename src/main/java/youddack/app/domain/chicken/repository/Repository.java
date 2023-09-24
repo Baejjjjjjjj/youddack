@@ -28,4 +28,8 @@ public interface Repository extends JpaRepository<Chicken, Long> {
     @Query("select c from Chicken c left JOIN Brand b On c.brand.id = b.id where c.id>:chicken_id order by c.id")
     List<Chicken> findChickenListWithBrandLimit(@Param("chicken_id") Long chicken_id, Pageable pageable);
 
+    @Query("select c from Chicken c where c.brand.id = :id  and c.id>:chicken_id order by c.id")
+    List<Chicken> findChickenListLimitAndBrand(@Param("chicken_id") Long chicken_id, @Param("id")Long id,  Pageable pageable);
+
+
 }
