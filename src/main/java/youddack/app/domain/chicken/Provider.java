@@ -19,7 +19,9 @@ import static youddack.app.domain.chicken.Converter.*;
 @RequiredArgsConstructor
 public class Provider {
 
+    final FlavorRepository flavorRepository;
     final Repository repository;
+
     final BrandRepository brandRepository;
 
     final CustomRepository customRepository;
@@ -122,7 +124,7 @@ public class Provider {
         String sort = "";
 
         Pageable pageable = PageRequest.of(0,10);
-        List<Chicken> chickenList = customRepository.selectChickenList(chicken_id,category_name,part_name,start_price,end_price,sort_id,flavorList,chicken_name);
+        List<Chicken> chickenList = customRepository.selectChickenList(chicken_id,category_name,part_name,start_price,end_price,sort_id,flavorList);
         System.out.println(chickenList.size());
 
         List<ResponseDto.ChickenDto> chickenDtoList = new ArrayList<>();
@@ -159,7 +161,6 @@ public class Provider {
 
        String code = (Long.toString(answerList.get(0)) + Long.toString(answerList.get(1)) + Long.toString(answerList.get(2)) + Long.toString(answerList.get(3)) + Long.toString(answerList.get(4)));
 
-       System.out.println(code);
        var id = 0;
 
        if(code == "10001"||code=="10101"||code == "10111"||code == "11001"){
@@ -189,5 +190,23 @@ public class Provider {
 
        return toRecommendChickenTypeDto(recommendation.get(), recommendationDescriptions);
 
+    }
+
+    public ResponseDto.ListChickenDto findChickenListWithName(Long chicken_id, String chicken_name) {
+
+        Pageable pageable = PageRequest.of(0,10);
+        List<Chicken> chickenList= repository.findAllByIdAndByChickenName(chicken_id,chicken_name,pageable);
+
+        List<ResponseDto.ChickenDto> chickenDtoList = new ArrayList<>();
+
+        for(int i = 0; i<chickenList.size();i++){
+
+            Long id = chickenList.get(i).getId();
+            List<Flavor> flavorList = flavorRepository.findFlavorWithChickenFlavorById(id);
+            chickenDtoList.add(toChickenDto(chickenList.get(i),flavorList));
+
+        }
+
+        return Converter.toChickenListDto(chickenDtoList);
     }
 }

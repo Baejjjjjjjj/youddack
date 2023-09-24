@@ -22,7 +22,7 @@ public class CustomRepository  {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<Chicken> selectChickenList(Long chicken_id,String category_name, String part_name, Integer start_price, Integer end_price, Integer sort_id, List<String> flavorList, String chicken_name){
+    public List<Chicken> selectChickenList(Long chicken_id,String category_name, String part_name, Integer start_price, Integer end_price, Integer sort_id, List<String> flavorList){
 
         QChicken chicken = QChicken.chicken;
 
@@ -37,28 +37,6 @@ public class CustomRepository  {
         BooleanBuilder builder = new BooleanBuilder();
 
         BooleanBuilder sortBuilder = new BooleanBuilder();
-
-
-
-        if(chicken_name!="" || chicken_name!=null){
-
-            System.out.println("chicken_name: "+chicken_name);
-            builder.and(chicken.name.contains(chicken_name));
-
-            List<Chicken> chickenList = queryFactory.select(chicken).distinct()
-                    .from(chickenCategory)
-                    .join(chickenCategory.chicken, chicken)
-                    .join(chickenCategory.category, category)
-                    .where(chickenCategory.chicken.id.eq(chicken.id),
-                            chickenCategory.category.id.eq(category.id),
-                            chicken.id.gt(chicken_id),
-                            builder)
-                    .orderBy(chicken.id.asc())
-                    .limit(10).stream().toList();
-
-            return chickenList;
-
-        }
 
 
         if(category_name!=""){
