@@ -1,9 +1,11 @@
 package youddack.app.domain.chicken.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,8 @@ public class CustomRepository  {
     private final JPAQueryFactory queryFactory;
 
     public List<Chicken> selectChickenList(Long chicken_id,String category_name, String part_name, Integer start_price, Integer end_price, Integer sort_id, List<String> flavorList){
+
+        System.out.println(sort_id);
 
         QChicken chicken = QChicken.chicken;
 
@@ -76,6 +80,7 @@ public class CustomRepository  {
 
         if(sort_id==0){
             //querydsl 은 예전버전에서는 연관관계없인 조인을 허락하지 않았다.
+
             List<Chicken> chickenList = queryFactory.select(chickenCategory.chicken).distinct()
                     .from(chickenCategory)
                     .join(chickenCategory.chicken, chicken)
@@ -93,11 +98,11 @@ public class CustomRepository  {
             return chickenList;
 
         }
-        if(sort_id==1){
 
-            System.out.println(chicken.id);
-            System.out.println(category.id);
-            System.out.println(chicken_id);
+        JPAQueryFactory subqueryFactory = new JPAQueryFactory(entity)
+
+        if(sort_id==1){
+            System.out.println("가격 낮은 순입니다");
             List<Chicken> chickenList = queryFactory.select(chickenCategory.chicken).distinct()
                     .from(chickenCategory)
                     .join(chickenCategory.chicken, chicken)
@@ -109,7 +114,8 @@ public class CustomRepository  {
                     .orderBy(chicken.price.asc())
                     .limit(10).stream().toList();
 
-            System.out.println("size:"+chickenList.size());
+
+
             return chickenList;
         }
         if(sort_id==2){
