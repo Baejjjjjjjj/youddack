@@ -99,7 +99,6 @@ public class CustomRepository  {
 
         }
 
-        JPAQueryFactory subqueryFactory = new JPAQueryFactory(entity)
 
         if(sort_id==1){
             System.out.println("가격 낮은 순입니다");
