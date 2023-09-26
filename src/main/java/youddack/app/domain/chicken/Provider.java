@@ -160,27 +160,31 @@ public class Provider {
 
        var id = 0;
 
-       if(code == "10001"||code=="10101"||code == "10111"||code == "11001"){
+       System.out.println(code);
+       //string은 == 로 비교하지 말기!
+       if(code.equals("10001")||code.equals("10101")||code.equals("10111")||code.equals("11001")){
            id = 1;
        }
-       else if(code == "00100"||code=="01000"||code == "01010"||code == "01100"){
+       else if(code.equals("00100")||code.equals("01000")||code.equals("01010")||code.equals("01100")){
            id = 2;
        }
-       else if(code == "00010"||code=="00110"||code == "01110"){
+       else if(code.equals("00010")||code.equals("00110")||code.equals("01110")){
            id = 3;
        }
-       else if(code == "00000"||code=="00001"||code == "00011"||code == "00101"||code == "00111"||
-               code == "01001"||code == "01011"||code == "01101"||code == "01111"){
+       else if(code.equals("00000")||code.equals("00001")||code.equals("00011")||code.equals("00101")||code.equals("00111")||
+               code.equals("01001")||code.equals("01011")||code.equals("01101")||code.equals("01111")){
            id = 4;
        }
-       else if(code == "10100"||code=="10110"||code == "11100"){
+       else if(code.equals("10100")||code.equals("10110")||code.equals("11100")){
            id = 5;
        }
-       else if(code == "10000"||code=="10010"||code == "11000"||code == "11010"||code == "11110"){
+       else if(code.equals("10000")||code.equals("10010")||code.equals("11000")||code.equals("11010")||code.equals( "11110")){
            id = 6;
        }else{
             id = 7;
        }
+
+       System.out.println(id);
 
        Optional<Recommendation> recommendation = recommendationRepository.findById(Long.valueOf(id));
        List<RecommendationDescription> recommendationDescriptions = recommendationDescriptionsRepository.findByRecommendationId(recommendation.get().getId());

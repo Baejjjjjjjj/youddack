@@ -14,6 +14,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Repository;
 import youddack.app.domain.chicken.domain.*;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Random;
 
@@ -80,6 +81,7 @@ public class CustomRepository  {
 
         if(sort_id==0){
             //querydsl 은 예전버전에서는 연관관계없인 조인을 허락하지 않았다.
+
 
             List<Chicken> chickenList = queryFactory.select(chickenCategory.chicken).distinct()
                     .from(chickenCategory)
