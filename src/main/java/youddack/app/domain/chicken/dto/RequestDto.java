@@ -27,6 +27,11 @@ public class RequestDto {
         @NotEmpty
         private Long chicken_id =Long.valueOf(0);
 
+        @Schema(description = "rank_id", defaultValue = "0")
+        @Builder.Default
+        @NotEmpty
+        private Long rank_id =Long.valueOf(0);
+
         @Schema(description = "sort_id", defaultValue = "1")
         @Builder.Default
         private Integer sort_id = 0;

@@ -9,7 +9,6 @@ import youddack.app.domain.chicken.dto.ResponseDto;
 import youddack.app.domain.chicken.repository.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,14 +84,14 @@ public class Provider {
             Long chicken_ids = chickenList.get(i).getId();
             System.out.println(chicken_ids);
             List<Flavor> flavorList = repository.findByChickenIdJoinFlavor(chicken_ids);
-            chickenDtoList.add(toChickenDto(chickenList.get(i), flavorList));
+            chickenDtoList.add(toChickenDto(chickenList.get(i), flavorList,null));
         }
 
         return toChickenListDto(chickenDtoList);
 
     }
 
-    public ResponseDto.ListChickenDto findChickenList(Long chicken_id, Long brand_id, List<String> flavorList,String category_name, String part_name, Integer start_price, Integer end_price, Integer sort_id, String chicken_name){
+    public ResponseDto.ListChickenDto findChickenList(Long chicken_id, Long brand_id, List<String> flavorList,String category_name, String part_name, Integer start_price, Integer end_price, Integer sort_id, String chicken_name, Long rank_id){
 
         if(sort_id==0&&chicken_id==0){
             System.out.println("추천순 초기 정렬입니다.");
@@ -114,23 +113,34 @@ public class Provider {
                 Optional<Chicken> chickens = repository.findById(RecommendChickenNameList.get(i));
                 Chicken chicken = chickens.get();
                 List<Flavor> recommendFlavorList = repository.findByChickenIdJoinFlavor(chicken.getId());
-                RecommendDtoList.add(toChickenDto(chicken, recommendFlavorList));
+                RecommendDtoList.add(toChickenDto(chicken, recommendFlavorList,null));
             }
             return toChickenListDto(RecommendDtoList);
         }
 
-        System.out.println(sort_id);
 
-        List<Chicken> chickenList = customRepository.selectChickenList(chicken_id,category_name,part_name,start_price,end_price,sort_id,flavorList);
+        List<Chicken> chickenList = customRepository.selectChickenList(chicken_id,category_name,part_name,start_price,end_price,sort_id,flavorList,rank_id);
 
+
+        List<Long> rank = new ArrayList<>();
+        if(sort_id==1){
+            System.out.println(sort_id);
+            rank = repository.findRankOrderByPriceAsc(rank_id);
+        }else if(sort_id==2){
+            System.out.println(sort_id);
+            rank = repository.findRankOrderByCapacityAsc(rank_id);
+
+        }else if(sort_id==3){
+            System.out.println(sort_id);
+            rank = repository.findRankOrderByPriceDesc(rank_id);
+        }
 
         List<ResponseDto.ChickenDto> chickenDtoList = new ArrayList<>();
         for(int i = 0; i < chickenList.size();i++){
             Long chicken_ids = chickenList.get(i).getId();
             System.out.println(chicken_ids);
             List<Flavor> flavorLists = customRepository.SelectFlavorList(chicken_ids, flavorList);
-            chickenDtoList.add(toChickenDto(chickenList.get(i), flavorLists));
-
+            chickenDtoList.add(toChickenDto(chickenList.get(i), flavorLists, rank.get(i)));
         }
 
         return toChickenListDto(chickenDtoList);
@@ -204,7 +214,7 @@ public class Provider {
 
             Long id = chickenList.get(i).getId();
             List<Flavor> flavorList = flavorRepository.findFlavorWithChickenFlavorById(id);
-            chickenDtoList.add(toChickenDto(chickenList.get(i),flavorList));
+            chickenDtoList.add(toChickenDto(chickenList.get(i),flavorList,null));
 
         }
 

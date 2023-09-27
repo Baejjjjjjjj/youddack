@@ -52,6 +52,8 @@ public class ResponseDto {
 
         private Long chicken_id;
 
+        private Long rank_number;
+
         private Integer chicken_price;
 
         private String chicken_name;

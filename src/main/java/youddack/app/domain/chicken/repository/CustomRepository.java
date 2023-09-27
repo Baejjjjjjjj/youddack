@@ -5,6 +5,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,9 @@ public class CustomRepository  {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<Chicken> selectChickenList(Long chicken_id,String category_name, String part_name, Integer start_price, Integer end_price, Integer sort_id, List<String> flavorList){
+    final youddack.app.domain.chicken.repository.Repository repository;
+
+    public List<Chicken> selectChickenList(Long chicken_id,String category_name, String part_name, Integer start_price, Integer end_price, Integer sort_id, List<String> flavorList, Long rank_id){
 
         System.out.println(sort_id);
 
@@ -104,32 +107,40 @@ public class CustomRepository  {
 
         if(sort_id==1){
             System.out.println("가격 낮은 순입니다");
-            List<Chicken> chickenList = queryFactory.select(chickenCategory.chicken).distinct()
+
+            NumberExpression<Integer> rankSubquery = Expressions.numberPath(Integer.class,
+                    "(SELECT COUNT(*) FROM Chicken as c2 WHERE c2.price < " + chicken.price + ")");
+
+           // Integer rank = repository.findRankOrderByPriceAsc()
+            List<Chicken> chickenList = queryFactory
+                    .select(chickenCategory.chicken
+                    ).distinct()
                     .from(chickenCategory)
                     .join(chickenCategory.chicken, chicken)
                     .join(chickenCategory.category, category)
                     .where(chickenCategory.chicken.id.eq(chicken.id),
-                            chickenCategory.category.id.eq(category.id),
-                            chicken.id.gt(chicken_id),
-                            builder)
+                            chickenCategory.category.id.eq(category.id), // chicken_id 사용
+                            rankSubquery.gt(rank_id)
+                    )
                     .orderBy(chicken.price.asc())
-                    .limit(10).stream().toList();
-
-
+                    .limit(10)
+                    .fetch();
+            System.out.println("rankSubquery:"+rankSubquery);
 
             return chickenList;
         }
         if(sort_id==2){
 
+
             List<Chicken> chickenList = queryFactory.select(chickenCategory.chicken).distinct()
                     .from(chickenCategory)
                     .join(chickenCategory.chicken, chicken)
                     .join(chickenCategory.category, category)
                     .where(chickenCategory.chicken.id.eq(chicken.id),
                             chickenCategory.category.id.eq(category.id),
-                            chicken.id.gt(chicken_id),
                             builder)
-                    .orderBy(chicken.capacity.asc())
+                    .orderBy(chicken.capacity.desc(), chicken.id.asc())
+                    .offset(rank_id)
                     .limit(10).stream().toList();
 
 
@@ -137,13 +148,17 @@ public class CustomRepository  {
         }
 
         if(sort_id==3) {
+
+            NumberExpression<Integer> rankSubquery = Expressions.numberPath(Integer.class,
+                    "(SELECT COUNT(*) FROM Chicken as c2 WHERE c2.price > " + chicken.price + ")");
+
             List<Chicken> chickenList = queryFactory.select(chickenCategory.chicken).distinct()
                     .from(chickenCategory)
                     .join(chickenCategory.chicken, chicken).limit(10)
                     .join(chickenCategory.category, category)
                     .where(chickenCategory.chicken.id.eq(chicken.id),
                             chickenCategory.category.id.eq(category.id),
-                            chicken.id.gt(chicken_id),
+                            rankSubquery.gt(rank_id),
                             builder)
                     .orderBy(chicken.price.desc())
                     .stream().toList();

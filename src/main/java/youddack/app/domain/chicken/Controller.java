@@ -81,7 +81,7 @@ public class Controller {
 
 
         return new BaseResponse<>(provider.findChickenList(request.getChicken_id(), request.getBrand_id(), request.getFlavor() ,
-               request.getCategory_name(), request.getPart_name(), request.getStart_price(), request.getEnd_price() , request.getSort_id(), request.getChicken_name()));
+               request.getCategory_name(), request.getPart_name(), request.getStart_price(), request.getEnd_price() , request.getSort_id(), request.getChicken_name(),request.getRank_id()));
 
 
     }
