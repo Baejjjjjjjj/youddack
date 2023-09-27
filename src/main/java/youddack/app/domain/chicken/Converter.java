@@ -35,10 +35,11 @@ public class Converter {
                 .build();
     }
 
-    public static ResponseDto.ChickenDto toChickenDto(Chicken chicken, List<Flavor> flavor){
+    public static ResponseDto.ChickenDto toChickenDto(Chicken chicken, List<Flavor> flavor, Long rank_id){
 
         return ResponseDto.ChickenDto.builder()
                 .chicken_id(chicken.getId())
+                .rank_number(rank_id)
                 .chicken_price(chicken.getPrice())
                 .chicken_name(chicken.getName())
                 .chicken_image_url(chicken.getImage_url())
