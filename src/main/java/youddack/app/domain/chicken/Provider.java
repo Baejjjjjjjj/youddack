@@ -170,36 +170,42 @@ public class Provider {
 
        var id = 0;
 
-       System.out.println(code);
+       String color_code = "";
        //string은 == 로 비교하지 말기!
        if(code.equals("10001")||code.equals("10101")||code.equals("10111")||code.equals("11001")){
            id = 1;
+           code = "#EA2AD7";
        }
        else if(code.equals("00100")||code.equals("01000")||code.equals("01010")||code.equals("01100")){
            id = 2;
+           code ="#28C1BC";
        }
        else if(code.equals("00010")||code.equals("00110")||code.equals("01110")){
            id = 3;
+           code = "#007851";
        }
        else if(code.equals("00000")||code.equals("00001")||code.equals("00011")||code.equals("00101")||code.equals("00111")||
                code.equals("01001")||code.equals("01011")||code.equals("01101")||code.equals("01111")){
            id = 4;
+           code ="#EA412A";
        }
        else if(code.equals("10100")||code.equals("10110")||code.equals("11100")){
            id = 5;
+           code = "#EEBB38";
        }
        else if(code.equals("10000")||code.equals("10010")||code.equals("11000")||code.equals("11010")||code.equals( "11110")){
            id = 6;
+           code = "#EA642A";
        }else{
             id = 7;
+            code = "#9747FF";
        }
 
        System.out.println(id);
 
        Optional<Recommendation> recommendation = recommendationRepository.findById(Long.valueOf(id));
        List<RecommendationDescription> recommendationDescriptions = recommendationDescriptionsRepository.findByRecommendationId(recommendation.get().getId());
-
-       return toRecommendChickenTypeDto(recommendation.get(), recommendationDescriptions);
+       return toRecommendChickenTypeDto(recommendation.get(), recommendationDescriptions,code,recommendation.get().getRecommend_brand());
 
     }
 
