@@ -85,7 +85,7 @@ public class Converter {
                 .build();
     }
 
-    public static ResponseDto.RecommendChickenTypeDto toRecommendChickenTypeDto(Recommendation recommendation, List<RecommendationDescription> recommendationDescriptionList){
+    public static ResponseDto.RecommendChickenTypeDto toRecommendChickenTypeDto(Recommendation recommendation, List<RecommendationDescription> recommendationDescriptionList, String color_code, Brand brand){
 
         return ResponseDto.RecommendChickenTypeDto.builder()
                 .chicken_type_id(recommendation.getId())
@@ -98,6 +98,8 @@ public class Converter {
                 .recommend_chicken2_image_url(recommendation.getRecommend_chicken2_image_url())
                 .recommend_chicken3_name(recommendation.getRecommend_chicken3_name())
                 .recommend_chicken3_image_url(recommendation.getRecommend_chicken3_image_url())
+                .color_code(color_code)
+                .brand_name(brand.getName())
                 .build();
     }
 }

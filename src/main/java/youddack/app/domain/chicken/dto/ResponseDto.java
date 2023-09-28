@@ -104,6 +104,10 @@ public class ResponseDto {
 
         private String answer2_text;
 
+        private String color_code;
+
+        private String brand_name;
+
 
     }
 
@@ -140,6 +144,10 @@ public class ResponseDto {
         private String recommend_chicken3_name;
 
         private String recommend_chicken3_image_url;
+
+        private String color_code;
+
+        private String brand_name;
 
     }
 
