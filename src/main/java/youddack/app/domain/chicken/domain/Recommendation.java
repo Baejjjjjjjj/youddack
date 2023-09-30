@@ -18,7 +18,7 @@ public class Recommendation extends BaseEntity {
     private Long id;
 
     private String name;
-
+    @Column(length = 1000)
     private String image_url;
 
     @OneToOne
@@ -26,15 +26,15 @@ public class Recommendation extends BaseEntity {
     private Brand recommend_brand;
 
     private String recommend_chicken1_name;
-
+    @Column(length = 1000)
     private String recommend_chicken1_image_url;
 
     private String recommend_chicken2_name;
-
+    @Column(length = 1000)
     private String recommend_chicken2_image_url;
 
     private String recommend_chicken3_name;
-
+    @Column(length = 1000)
     private String recommend_chicken3_image_url;
 
 

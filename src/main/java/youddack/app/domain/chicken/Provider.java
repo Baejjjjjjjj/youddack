@@ -32,6 +32,21 @@ public class Provider {
     final RecommendationRepository recommendationRepository;
 
     final RecommendationDescriptionsRepository recommendationDescriptionsRepository;
+
+    public String findS3ImageUrl() {
+
+        for(int i = 0; i < 2; i++){
+
+            Optional<Chicken> chicken = repository.findById(Long.valueOf(i));
+            String name = chicken.get().getName();
+            String brand = chicken.get().getBrand().getName();
+            //String url =
+            System.out.println(name);
+        }
+
+        return null;
+    }
+
     /*
     * 치킨 상세 정보 조회
     * */
@@ -93,7 +108,9 @@ public class Provider {
 
     public ResponseDto.ListChickenDto findChickenList(Long chicken_id, Long brand_id, List<String> flavorList,String category_name, String part_name, Integer start_price, Integer end_price, Integer sort_id, String chicken_name, Long rank_id){
 
-        if(sort_id==0&&chicken_id==0){
+        System.out.println(flavorList.size());
+
+        if(sort_id==0&&chicken_id==0&&(flavorList.size()==0&&category_name==""&&part_name==""&&start_price==0&&end_price>=23000)){
             System.out.println("추천순 초기 정렬입니다.");
             List<ResponseDto.ChickenDto> RecommendDtoList = new ArrayList<>();
             List<Long> RecommendChickenNameList = new ArrayList<Long>();//
@@ -136,11 +153,15 @@ public class Provider {
         }
 
         List<ResponseDto.ChickenDto> chickenDtoList = new ArrayList<>();
-        for(int i = 0; i < chickenList.size();i++){
+        for(int i = 0; i < chickenList.size();i++) {
             Long chicken_ids = chickenList.get(i).getId();
             System.out.println(chicken_ids);
             List<Flavor> flavorLists = customRepository.SelectFlavorList(chicken_ids, flavorList);
-            chickenDtoList.add(toChickenDto(chickenList.get(i), flavorLists, rank.get(i)));
+            if (sort_id == 0) {
+                chickenDtoList.add(toChickenDto(chickenList.get(i), flavorLists, null));
+            } else {
+                chickenDtoList.add(toChickenDto(chickenList.get(i), flavorLists, rank.get(i)));
+            }
         }
 
         return toChickenListDto(chickenDtoList);

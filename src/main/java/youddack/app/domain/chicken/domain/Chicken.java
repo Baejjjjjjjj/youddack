@@ -16,6 +16,8 @@ public class Chicken extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @Column(length = 1000)
     private String image_url;
 
     @Column(length = 200)
