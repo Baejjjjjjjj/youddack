@@ -108,7 +108,9 @@ public class Provider {
 
     public ResponseDto.ListChickenDto findChickenList(Long chicken_id, Long brand_id, List<String> flavorList,String category_name, String part_name, Integer start_price, Integer end_price, Integer sort_id, String chicken_name, Long rank_id){
 
-        if(sort_id==0&&chicken_id==0){
+        System.out.println(flavorList.size());
+
+        if(sort_id==0&&chicken_id==0&&(flavorList.size()==0&&category_name==""&&part_name==""&&start_price==0&&end_price>=23000)){
             System.out.println("추천순 초기 정렬입니다.");
             List<ResponseDto.ChickenDto> RecommendDtoList = new ArrayList<>();
             List<Long> RecommendChickenNameList = new ArrayList<Long>();//

@@ -94,8 +94,10 @@ public class CustomRepository  {
                     .innerJoin(chickenFlavor.flavor).on(chickenFlavor.flavor.id.eq(flavor.id))
                     .where(chickenCategory.chicken.id.eq(chicken.id),
                             chickenCategory.category.id.eq(category.id),
-                            chicken.id.gt(chicken_id),
-                            builder)
+                            builder,
+                            chicken.id.gt(chicken_id)
+                            )
+                    .groupBy(chicken.name)
                     .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
                      .limit(10).fetch().stream().toList();
 
@@ -121,7 +123,9 @@ public class CustomRepository  {
                     .where(chickenCategory.chicken.id.eq(chicken.id),
                             chickenCategory.category.id.eq(category.id), // chicken_id 사용
                             rankSubquery.gt(rank_id)
+                            ,builder
                     )
+                    .groupBy(chicken.name)
                     .orderBy(chicken.price.asc())
                     .limit(10)
                     .fetch();
@@ -139,6 +143,7 @@ public class CustomRepository  {
                     .where(chickenCategory.chicken.id.eq(chicken.id),
                             chickenCategory.category.id.eq(category.id),
                             builder)
+                    .groupBy(chicken.name)
                     .orderBy(chicken.capacity.desc(), chicken.id.asc())
                     .offset(rank_id)
                     .limit(10).stream().toList();
@@ -160,6 +165,7 @@ public class CustomRepository  {
                             chickenCategory.category.id.eq(category.id),
                             rankSubquery.gt(rank_id),
                             builder)
+                    .groupBy(chicken.name)
                     .orderBy(chicken.price.desc())
                     .stream().toList();
 
