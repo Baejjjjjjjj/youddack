@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import youddack.app.config.BaseResponse;
+import youddack.app.config.Code;
 import youddack.app.domain.chicken.dto.RequestDto;
 import youddack.app.domain.chicken.dto.ResponseDto;
 import java.util.List;
@@ -115,6 +116,24 @@ public class Controller {
         return new BaseResponse<>(provider.findChickenDetail(arg0));
 
     }
+
+    /**
+     * 치킨 이미지 등록
+     * [GET] /chicken/images
+     * @return BaseResponse<String>
+     * */
+
+
+    @GetMapping("/images")
+    public BaseResponse<String> GetChickenImages(){
+
+        String url = provider.findS3ImageUrl();
+
+
+
+        return new BaseResponse<>(Code.SUCCESS);
+    }
+
 
 
 }
