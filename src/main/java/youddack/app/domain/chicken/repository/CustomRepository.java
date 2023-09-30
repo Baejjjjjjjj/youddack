@@ -58,6 +58,7 @@ public class CustomRepository  {
 
                 System.out.println("맛 필터링:"+ flavorList.get(i));
                 if(i ==0){
+                    System.out.println("맛 필터링:"+ flavorList.get(i));
                     builder.and(flavor.name.eq(flavorList.get(i)));
                 }
                 else if(i==1){
@@ -112,24 +113,25 @@ public class CustomRepository  {
 
             NumberExpression<Integer> rankSubquery = Expressions.numberPath(Integer.class,
                     "(SELECT COUNT(*) FROM Chicken as c2 WHERE c2.price < " + chicken.price + ")");
-
-           // Integer rank = repository.findRankOrderByPriceAsc()
+            System.out.println("111111");
             List<Chicken> chickenList = queryFactory
                     .select(chickenCategory.chicken
                     ).distinct()
                     .from(chickenCategory)
                     .join(chickenCategory.chicken, chicken)
                     .join(chickenCategory.category, category)
+                    .innerJoin(chickenFlavor).on(chickenCategory.chicken.id.eq(chickenFlavor.chicken.id))
+                    .innerJoin(chickenFlavor.flavor).on(chickenFlavor.flavor.id.eq(flavor.id))
                     .where(chickenCategory.chicken.id.eq(chicken.id),
                             chickenCategory.category.id.eq(category.id), // chicken_id 사용
+                            builder,
                             rankSubquery.gt(rank_id)
-                            ,builder
                     )
                     .groupBy(chicken.name)
                     .orderBy(chicken.price.asc())
                     .limit(10)
-                    .fetch();
-            System.out.println("rankSubquery:"+rankSubquery);
+                    .fetch().stream().toList();
+            System.out.println("111111");
 
             return chickenList;
         }
@@ -140,11 +142,13 @@ public class CustomRepository  {
                     .from(chickenCategory)
                     .join(chickenCategory.chicken, chicken)
                     .join(chickenCategory.category, category)
+                    .innerJoin(chickenFlavor).on(chickenCategory.chicken.id.eq(chickenFlavor.chicken.id))
+                    .innerJoin(chickenFlavor.flavor).on(chickenFlavor.flavor.id.eq(flavor.id))
                     .where(chickenCategory.chicken.id.eq(chicken.id),
                             chickenCategory.category.id.eq(category.id),
                             builder)
                     .groupBy(chicken.name)
-                    .orderBy(chicken.capacity.desc(), chicken.id.asc())
+                    .orderBy(chicken.capacity.desc())
                     .offset(rank_id)
                     .limit(10).stream().toList();
 
@@ -161,6 +165,8 @@ public class CustomRepository  {
                     .from(chickenCategory)
                     .join(chickenCategory.chicken, chicken).limit(10)
                     .join(chickenCategory.category, category)
+                    .innerJoin(chickenFlavor).on(chickenCategory.chicken.id.eq(chickenFlavor.chicken.id))
+                    .innerJoin(chickenFlavor.flavor).on(chickenFlavor.flavor.id.eq(flavor.id))
                     .where(chickenCategory.chicken.id.eq(chicken.id),
                             chickenCategory.category.id.eq(category.id),
                             rankSubquery.gt(rank_id),
