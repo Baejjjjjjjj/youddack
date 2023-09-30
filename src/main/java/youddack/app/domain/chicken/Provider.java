@@ -32,6 +32,21 @@ public class Provider {
     final RecommendationRepository recommendationRepository;
 
     final RecommendationDescriptionsRepository recommendationDescriptionsRepository;
+
+    public String findS3ImageUrl() {
+
+        for(int i = 0; i < 2; i++){
+
+            Optional<Chicken> chicken = repository.findById(Long.valueOf(i));
+            String name = chicken.get().getName();
+            String brand = chicken.get().getBrand().getName();
+            //String url =
+            System.out.println(name);
+        }
+
+        return null;
+    }
+
     /*
     * 치킨 상세 정보 조회
     * */
@@ -136,11 +151,15 @@ public class Provider {
         }
 
         List<ResponseDto.ChickenDto> chickenDtoList = new ArrayList<>();
-        for(int i = 0; i < chickenList.size();i++){
+        for(int i = 0; i < chickenList.size();i++) {
             Long chicken_ids = chickenList.get(i).getId();
             System.out.println(chicken_ids);
             List<Flavor> flavorLists = customRepository.SelectFlavorList(chicken_ids, flavorList);
-            chickenDtoList.add(toChickenDto(chickenList.get(i), flavorLists, rank.get(i)));
+            if (sort_id == 0) {
+                chickenDtoList.add(toChickenDto(chickenList.get(i), flavorLists, null));
+            } else {
+                chickenDtoList.add(toChickenDto(chickenList.get(i), flavorLists, rank.get(i)));
+            }
         }
 
         return toChickenListDto(chickenDtoList);

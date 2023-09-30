@@ -55,7 +55,5 @@ public interface Repository extends JpaRepository<Chicken, Long> {
     Long findRankByChickenIdAsc(@Param("chicken_id") Long chicken_id);
 
 
-
-
-
+    String findNmaeById(int i);
 }
