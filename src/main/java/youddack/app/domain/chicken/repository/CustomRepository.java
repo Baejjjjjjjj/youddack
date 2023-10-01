@@ -111,9 +111,6 @@ public class CustomRepository  {
         if(sort_id==1){
             System.out.println("가격 낮은 순입니다");
 
-            NumberExpression<Integer> rankSubquery = Expressions.numberPath(Integer.class,
-                    "(SELECT COUNT(*) FROM Chicken as c2 WHERE c2.price < " + chicken.price + ")");
-            System.out.println("111111");
             List<Chicken> chickenList = queryFactory
                     .select(chickenCategory.chicken
                     ).distinct()
@@ -124,14 +121,14 @@ public class CustomRepository  {
                     .innerJoin(chickenFlavor.flavor).on(chickenFlavor.flavor.id.eq(flavor.id))
                     .where(chickenCategory.chicken.id.eq(chicken.id),
                             chickenCategory.category.id.eq(category.id), // chicken_id 사용
-                            builder,
-                            rankSubquery.gt(rank_id)
+                            builder
+                            //rankSubquery.gt(rank_id)
                     )
                     .groupBy(chicken.name)
+                    .offset(rank_id+1)
                     .orderBy(chicken.price.asc())
                     .limit(10)
                     .fetch().stream().toList();
-            System.out.println("111111");
 
             return chickenList;
         }
@@ -148,7 +145,7 @@ public class CustomRepository  {
                             builder)
                     .groupBy(chicken.name)
                     .orderBy(chicken.capacity.desc())
-                    .offset(rank_id)
+                    .offset(rank_id+1)
                     .limit(10).stream().toList();
 
 
@@ -168,9 +165,10 @@ public class CustomRepository  {
                     .innerJoin(chickenFlavor.flavor).on(chickenFlavor.flavor.id.eq(flavor.id))
                     .where(chickenCategory.chicken.id.eq(chicken.id),
                             chickenCategory.category.id.eq(category.id),
-                            rankSubquery.gt(rank_id),
+                            //rankSubquery.gt(rank_id),
                             builder)
                     .groupBy(chicken.name)
+                    .offset(rank_id+1)
                     .orderBy(chicken.price.desc())
                     .stream().toList();
 
