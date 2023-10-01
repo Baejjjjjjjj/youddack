@@ -137,7 +137,6 @@ public class CustomRepository  {
         }
         if(sort_id==2){
 
-
             List<Chicken> chickenList = queryFactory.select(chickenCategory.chicken).distinct()
                     .from(chickenCategory)
                     .join(chickenCategory.chicken, chicken)
